@@ -1,17 +1,31 @@
 # DragNDropListView
 DragNDropListView is a direct replacement for the stock Android ListView. If you know how to use ListView, you already know how to use DragNDropListView. All you have to do is replace ListView and SimpleCursorAdapter/SimpleAdapter with DragNDropListView and its adapters.
 
+# Setup
+Setup with Gradle and Android Studio
+* Create a `libs` directory in your project's root direcotry
+* Get DragNDropListView via `git clone` or the `.zip` archive:
+    - either [download](https://github.com/popeye123/DragNDropList/archive/master.zip) and extract the `.zip` to the newly created libs directory
+    - or go to the libs directory and clone the this repo (and optionally configure git submodule)
+* adjust `settings.gradle`
+```gradle
+include ':app', ':DragNDropList'
+project(':DragNDropList').projectDir = new File('libs/DragNDropList')
+```
+* add the compile dependency to your `build.gradle`
+```gradle
+dependencies {
+    // your other dependencies...
+    compile project(":DragNDropList")
+}
+```
+* sync Gradle project
+
 # Usage
-DragNDropListView is an Android Library project. If you use Eclipse do the following.
-* Clone `git clone git://github.com/terlici/DragNDropList.git`
-* Import it in Eclipse
-* Add DragNDropList as a library to your Android project
-
 ### Layout
-
 A common layout for list view is the following:
 
-````xml
+```xml
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
@@ -21,15 +35,14 @@ A common layout for list view is the following:
     <ListView
         android:id="@id/android:list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        />
+        android:layout_height="match_parent"/>
 
 </LinearLayout>
-````
+```
 
 Just replace `ListView` with `com.terlici.dragndroplist.DragNDropListView`:
 
-````xml
+```xml
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
@@ -39,11 +52,10 @@ Just replace `ListView` with `com.terlici.dragndroplist.DragNDropListView`:
     <com.terlici.dragndroplist.DragNDropListView
         android:id="@id/android:list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        />
+        android:layout_height="match_parent"/>
 
 </LinearLayout>
-````
+```
 
 ### Row Layout
 In DragNDropListView each item has a drag handler, which the users touch to drag the item around.
@@ -51,38 +63,35 @@ In DragNDropListView each item has a drag handler, which the users touch to drag
 Here is a common layout for each row. It contains an image of a star and some text.
 The user can reorder the items by touching the star of an item and dragging it around.
 
-````xml
+```xml
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="80px"
     android:orientation="horizontal"
-    android:gravity="center_vertical"
-    >
+    android:gravity="center_vertical">
 
     <ImageView
         android:id="@+id/handler"
         android:layout_width="60px"
         android:layout_height="60px"
         android:src="@android:drawable/btn_star_big_on"
-        android:layout_marginLeft="8px"
-        />
+        android:layout_marginLeft="8px"/>
 
     <TextView
         android:id="@+id/text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Large Text"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:textAppearance="?android:attr/textAppearanceLarge"/>
 
 </LinearLayout>
-````
+```
 
 ### Loading DragNDropListView
-
 This is the usual way to load a ListView:
 
-````java
+```java
 ListView list = (ListView)findViewById(android.R.id.list);
 
 SimpleCursorAdapter adapter = new SimpleCursorAdapter(context,
@@ -93,14 +102,14 @@ SimpleCursorAdapter adapter = new SimpleCursorAdapter(context,
                         0);
 
 list.setListAdapter(adapter);
-````
+```
 
 When using DragNDropListView just replace `ListView` with `DragNDropListView`,
 `SimpleCursorAdapter` with `DragNDropCursorAdapter` and set the id of the drag
 handler as the last parameter of the adapter. In the row layout above this will
 be `R.id.handler`. Last, instead of `setListAdapter` use `setDragNDropAdapter`.
 
-````java
+```java
 DragNDropListView list = (DragNDropListView)findViewById(android.R.id.list);
 
 DragNDropCursorAdapter adapter = new DragNDropCursorAdapter(context,
@@ -111,20 +120,20 @@ DragNDropCursorAdapter adapter = new DragNDropCursorAdapter(context,
                            R.id.handler);
 
 list.setDragNDropAdapter(adapter);
-````
+```
 
 You are done! As you see there is very little to change to your existing code.
 
 ### Events
 DragNDropListView provides an event listener for drag and drop.
 
-````java
+```java
 list.setOnItemDragNDropListener(...)
-````
+```
 
 The interface for this listener is:
 
-````java
+```java
 public interface OnItemDragNDropListener {
     // Called when the item begins dragging.
     public void onItemDrag(DragNDropListView parent, View view, int position, long id);
@@ -132,7 +141,7 @@ public interface OnItemDragNDropListener {
     // Called after the item is dropped in place
     public void onItemDrop(DragNDropListView parent, View view, int startPosition, int endPosition, long id);
 }
-````
+```
 
 This event is useful when storing the reordered items.
 
